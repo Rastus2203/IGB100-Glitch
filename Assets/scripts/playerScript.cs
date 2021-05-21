@@ -27,6 +27,7 @@ public class playerScript : MonoBehaviour
     public Vector2 preJump;
     public Vector2 tester;
     public float floatTest;
+    public bool boolTest;
 
     // Start is called before the first frame update
     void Start()
@@ -56,12 +57,10 @@ public class playerScript : MonoBehaviour
 
 
         doGravity(ref velocity, gravity);
-        //preMove = plannedMovement;
         doMovement(ref velocity);
-        //preJump = plannedMovement;
         doJump(ref velocity, isGrounded);
 
-        rb.velocity = velocity;// * deltaTime;
+        rb.velocity = velocity;
     }
 
     bool getGrounded()
@@ -83,18 +82,8 @@ public class playerScript : MonoBehaviour
 
     void doGravity(ref Vector2 velocity, float gravity)
     {
-        //Math.Abs(velocity.y) <= Math.Abs(velocity.y - gravity * deltaTime * 0.5)
-        //preJump = new Vector2((float)Math.Abs(velocity.y), (float)Math.Abs(velocity.y - gravity * deltaTime * 0.5));
-        if (true)
-        {
-            preJump = velocity;
-            velocity.y -= gravity;
-            preMove = velocity;
-        } else
-        {
-            velocity.y = 0;
-        }
-        
+        velocity.y -= gravity;
+
         if (velocity.y < -20)
         {
             velocity.y = -20;
