@@ -15,6 +15,13 @@ public class playerScript : MonoBehaviour
     float moveSpeed = 3.5f;
     float jumpVel = 18f;
 
+    float direction = 1f;
+
+    public int health = 10;
+
+    float lastHurt;
+    float hurtCooldown = 0.5f;
+
     Vector2 velocity;
 
     SpriteRenderer spriteRenderer;
@@ -60,7 +67,18 @@ public class playerScript : MonoBehaviour
         doMovement(ref velocity);
         doJump(ref velocity, isGrounded);
 
+
+        transform.eulerAngles = new Vector3(0, direction * 90 + 90, 0);
         rb.velocity = velocity;
+    }
+
+    public void receiveDamage(int damage, bool force = false)
+    {
+        if (currentTime - lastHurt > hurtCooldown || force)
+        {
+            lastHurt = currentTime;
+            health -= damage;
+        }
     }
 
     bool getGrounded()
@@ -88,7 +106,6 @@ public class playerScript : MonoBehaviour
         {
             velocity.y = -20;
         }
-
     }
 
 
@@ -98,10 +115,12 @@ public class playerScript : MonoBehaviour
         if (Input.GetKey("d"))
         {
             velocity += new Vector2(1, 0) * moveSpeed;
+            direction = 1f;
         }
         if (Input.GetKey("a"))
         {
             velocity += new Vector2(-1, 0) * moveSpeed;
+            direction = -1f;
         }
 
     }

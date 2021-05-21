@@ -7,6 +7,7 @@ public class meleeRoamerScript : MonoBehaviour
     Rigidbody2D rb;
     float gravity = 0.8f;
     float moveSpeed = 2f;
+    int damage = 1;
 
     bool wasGrounded;
     bool isGrounded;
@@ -22,6 +23,8 @@ public class meleeRoamerScript : MonoBehaviour
     float height;
     float width;
 
+    playerScript playerScript;
+
     float direction = -1f; //Defaults to moving left
 
 
@@ -34,6 +37,7 @@ public class meleeRoamerScript : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        playerScript = GameObject.FindWithTag("Player").GetComponent<playerScript>();
 
 
         lastTurned = currentTime;
@@ -45,7 +49,7 @@ public class meleeRoamerScript : MonoBehaviour
 
     void FixedUpdate()
     {
-        
+
         currentTime = Time.time;
         deltaTime = Time.fixedDeltaTime;
 
@@ -78,12 +82,6 @@ public class meleeRoamerScript : MonoBehaviour
         doMovement(ref velocity);
 
 
-
-
-
-
-
-
         //Faces sprite in the direction it is moving. Also keeping it's rotation around the other axis locked
         transform.eulerAngles = new Vector3(0, direction * 90 + 90, 0);
 
@@ -93,7 +91,13 @@ public class meleeRoamerScript : MonoBehaviour
 
 
 
-
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            playerScript.receiveDamage(damage);
+        }
+    }
 
 
 
@@ -112,7 +116,6 @@ public class meleeRoamerScript : MonoBehaviour
             }
         }
         return false;
-
     }
 
     void doGravity(ref Vector2 velocity, float gravity)
@@ -123,7 +126,6 @@ public class meleeRoamerScript : MonoBehaviour
         {
             velocity.y = -20;
         }
-
     }
 
     void doMovement(ref Vector2 velocity)
