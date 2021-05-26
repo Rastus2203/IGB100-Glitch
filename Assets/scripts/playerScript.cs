@@ -12,7 +12,7 @@ public class playerScript : MonoBehaviour
     float currentTime;
     float deltaTime;
     float gravity = 0.8f;
-    float moveSpeed = 3.5f;
+    float moveSpeed = 5f;
     float jumpVel = 18f;
 
     public int gunDamage = 1;

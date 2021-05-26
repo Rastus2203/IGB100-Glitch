@@ -10,6 +10,8 @@ public class meleeRoamerScript : MonoBehaviour
     int damage = 1;
     public int health = 5;
 
+    int health = 5;
+
     bool wasGrounded;
     bool isGrounded;
     float lastTurned;
