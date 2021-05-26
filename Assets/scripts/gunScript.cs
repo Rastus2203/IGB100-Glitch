@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class gunScript : MonoBehaviour
 {
-    Transform emitter;
+    /*
     playerScript playerScript;
     float direction;
 
@@ -50,4 +50,5 @@ public class gunScript : MonoBehaviour
         }
 
     }
+    */
 }

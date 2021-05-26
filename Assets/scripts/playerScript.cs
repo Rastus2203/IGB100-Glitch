@@ -26,6 +26,9 @@ public class playerScript : MonoBehaviour
 
     Vector2 velocity;
 
+    String chosenAnimation = "player_idle";
+
+    Animator anim;
     SpriteRenderer spriteRenderer;
     int playerLayer;
 
@@ -38,11 +41,19 @@ public class playerScript : MonoBehaviour
     public float floatTest;
     public bool boolTest;
 
+    Transform emitter;
+    public GameObject bulletPrefab;
+
+    float shotCoolDown = 0.1f;
+    float lastShot;
+
     // Start is called before the first frame update
     void Start()
     {
+        anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        emitter = transform.GetChild(0).GetChild(0);
 
         width = spriteRenderer.bounds.size.x / 2;
         height = spriteRenderer.bounds.size.y / 2;
@@ -50,12 +61,15 @@ public class playerScript : MonoBehaviour
         playerLayer = 10;
         lastJump = Time.time;
 
+        
 
 
     }
 
     void FixedUpdate()
     {
+        chosenAnimation = "player_idle";
+
         currentTime = Time.time;
         deltaTime = Time.fixedDeltaTime;
 
@@ -64,17 +78,44 @@ public class playerScript : MonoBehaviour
 
         bool isGrounded = getGrounded();
 
+        
 
         doGravity(ref velocity, gravity);
         doMovement(ref velocity);
         doJump(ref velocity, isGrounded);
 
+        doShoot();
 
-        transform.eulerAngles = new Vector3(0, direction * 90 + 90, 0);
+        float yAngle = (direction == -1) ? 180 : 0;
+
+        transform.eulerAngles = new Vector3(0, yAngle, 0);
         rb.velocity = velocity;
+        anim.Play(chosenAnimation);
     }
 
+    void doShoot()
+    {
+        bool left = Input.GetKey("left");
+        bool right = Input.GetKey("right");
 
+
+        if (left || right)
+        {
+            chosenAnimation = "player_shooting"; // (chosenAnimation == "player_run") ? "player_shooting" : "player_stand";
+            if (left) direction = -1f;
+            if (right) direction = 1f;
+            if (currentTime - lastShot > shotCoolDown)
+            {
+                lastShot = currentTime;
+                GameObject bulletRef = GameObject.Instantiate(bulletPrefab);
+
+
+                
+                bulletRef.GetComponent<playerBulletScript>().init(emitter.position, new Vector2(direction, 0));
+            }
+
+        }
+    }
 
     public void receiveDamage(int damage, bool force = false)
     {
@@ -121,11 +162,13 @@ public class playerScript : MonoBehaviour
         {
             velocity += new Vector2(1, 0) * moveSpeed;
             direction = 1f;
+            chosenAnimation = "player_run";
         }
         if (Input.GetKey("a"))
         {
             velocity += new Vector2(-1, 0) * moveSpeed;
             direction = -1f;
+            chosenAnimation = "player_run";
         }
 
     }

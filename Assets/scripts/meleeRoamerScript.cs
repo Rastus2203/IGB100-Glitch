@@ -10,7 +10,6 @@ public class meleeRoamerScript : MonoBehaviour
     int damage = 1;
     public int health = 5;
 
-    int health = 5;
 
     bool wasGrounded;
     bool isGrounded;
@@ -126,7 +125,7 @@ public class meleeRoamerScript : MonoBehaviour
             RaycastHit2D hit = hits[i];
             if (hit.collider != null)
             {
-                if (hit.distance < 0.5 + width / 2 && hit.collider.tag == "platform")
+                if (hit.distance < 0.5 + width / 2 && hit.distance > width / 2 + 0.1f && (hit.collider.tag == "platform" || hit.collider.tag == "enemy"))
                 {
                     return true;
                 }

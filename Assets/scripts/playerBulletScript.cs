@@ -5,7 +5,7 @@ using UnityEngine;
 public class playerBulletScript : MonoBehaviour
 {
     Vector3 velocity = new Vector3(0, 0, 0);
-    float speedScalar = 0.1f;
+    float speedScalar = 0.2f;
     int damage;
 
     playerScript playerScript;
@@ -20,7 +20,7 @@ public class playerBulletScript : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag != "Player")
+        if (other.tag != "Player" && other.tag != "playerBullet")
         {
             other.gameObject.SendMessage("receiveDamage", damage, SendMessageOptions.DontRequireReceiver);
             Destroy(gameObject);
