@@ -8,6 +8,7 @@ public class meleeRoamerScript : MonoBehaviour
     float gravity = 0.8f;
     float moveSpeed = 2f;
     int damage = 1;
+    public int health = 5;
 
     int health = 5;
 
@@ -51,6 +52,11 @@ public class meleeRoamerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+
 
         currentTime = Time.time;
         deltaTime = Time.fixedDeltaTime;
@@ -83,6 +89,11 @@ public class meleeRoamerScript : MonoBehaviour
 
         doMovement(ref velocity);
 
+        if (checkFront())
+        {
+            direction = -direction;
+        }
+
 
         //Faces sprite in the direction it is moving. Also keeping it's rotation around the other axis locked
         transform.eulerAngles = new Vector3(0, direction * 90 + 90, 0);
@@ -100,6 +111,41 @@ public class meleeRoamerScript : MonoBehaviour
             playerScript.receiveDamage(damage);
         }
     }
+
+    public void receiveDamage(int damage)
+    {
+        health -= damage;
+        Debug.Log(health);
+    }
+
+    bool checkFront()
+    {
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction * new Vector2(1, 0), 1f);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit2D hit = hits[i];
+            if (hit.collider != null)
+            {
+                if (hit.distance < 0.5 + width / 2 && hit.collider.tag == "platform")
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
