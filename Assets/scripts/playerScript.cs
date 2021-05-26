@@ -15,7 +15,9 @@ public class playerScript : MonoBehaviour
     float moveSpeed = 3.5f;
     float jumpVel = 18f;
 
-    float direction = 1f;
+    public int gunDamage = 1;
+
+    public float direction = 1f;
 
     public int health = 10;
 
@@ -72,6 +74,8 @@ public class playerScript : MonoBehaviour
         rb.velocity = velocity;
     }
 
+
+
     public void receiveDamage(int damage, bool force = false)
     {
         if (currentTime - lastHurt > hurtCooldown || force)
@@ -80,6 +84,8 @@ public class playerScript : MonoBehaviour
             health -= damage;
         }
     }
+
+
 
     bool getGrounded()
     {
@@ -95,7 +101,6 @@ public class playerScript : MonoBehaviour
             }
         }
         return false;
-
     }
 
     void doGravity(ref Vector2 velocity, float gravity)
