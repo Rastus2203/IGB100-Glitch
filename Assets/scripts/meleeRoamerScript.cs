@@ -6,7 +6,7 @@ public class meleeRoamerScript : MonoBehaviour
 {
     Rigidbody2D rb;
     float gravity = 0.8f;
-    float moveSpeed = 2f;
+    public float moveSpeed = 2f;
     int damage = 1;
     public int health = 5;
 

@@ -44,12 +44,16 @@ public class playerScript : MonoBehaviour
     Transform emitter;
     public GameObject bulletPrefab;
 
-    float shotCoolDown = 0.1f;
-    float lastShot;
+    public float shotCoolDown = 0.1f;
+    [HideInInspector] public float lastShot = 0;
+
+    public float grenadeCoolDown = 5f;
+    [HideInInspector] public float lastGrenade;
 
     // Start is called before the first frame update
     void Start()
     {
+        lastGrenade = -grenadeCoolDown;
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
@@ -85,12 +89,25 @@ public class playerScript : MonoBehaviour
         doJump(ref velocity, isGrounded);
 
         doShoot();
+        doGrenade();
 
         float yAngle = (direction == -1) ? 180 : 0;
 
         transform.eulerAngles = new Vector3(0, yAngle, 0);
         rb.velocity = velocity;
         anim.Play(chosenAnimation);
+    }
+
+    void doGrenade()
+    {
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (currentTime - lastGrenade > grenadeCoolDown)
+            {
+                lastGrenade = currentTime;
+                Debug.Log("Grenade");
+            }
+        }
     }
 
     void doShoot()
@@ -176,7 +193,7 @@ public class playerScript : MonoBehaviour
     void doJump(ref Vector2 velocity, bool isGrounded)
     {
         floatTest = currentTime - lastJump;
-        if (Input.GetKey("space") && currentTime - lastJump > jumpCooldown && isGrounded)
+        if ((Input.GetKey("space") || Input.GetKey("w")) && currentTime - lastJump > jumpCooldown && isGrounded)
         {
             lastJump = currentTime;
             velocity += new Vector2(0, 1) * jumpVel;

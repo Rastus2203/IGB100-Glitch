@@ -18,14 +18,24 @@ public class playerBulletScript : MonoBehaviour
         damage = playerScript.gunDamage;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+
+    void onHit(Collider2D other)
     {
         if (other.tag != "Player" && other.tag != "playerBullet")
         {
+            Debug.Log(other.tag);
             other.gameObject.SendMessage("receiveDamage", damage, SendMessageOptions.DontRequireReceiver);
             Destroy(gameObject);
         }
     }
+
+
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        onHit(other);
+    }
+
 
     void FixedUpdate()
     {
