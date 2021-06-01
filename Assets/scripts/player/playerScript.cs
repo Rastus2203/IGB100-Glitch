@@ -8,23 +8,26 @@ public class playerScript : MonoBehaviour
     Rigidbody2D rb;
 
     float lastJump;
-    float jumpCooldown = 0.1f;
+    float jumpCooldown = 0.3f;
+    public bool doubleJumpUnlocked = false;
+    public float lastDoubleJump;
+    public float doubleJumpCoolDown = 1f;
+
     float currentTime;
     float deltaTime;
+
     float gravity = 0.8f;
     float moveSpeed = 5f;
     float jumpVel = 18f;
+    public float direction = 1f;
+    Vector2 velocity;
+    public int health = 10;
 
     public int gunDamage = 1;
-
-    public float direction = 1f;
-
-    public int health = 10;
+    public int grenadeDamage = 10;
 
     float lastHurt;
     float hurtCooldown = 0.5f;
-
-    Vector2 velocity;
 
     String chosenAnimation = "player_idle";
 
@@ -35,22 +38,18 @@ public class playerScript : MonoBehaviour
     float height;
     float width;
     
-    public Vector2 preMove;
-    public Vector2 preJump;
-    public Vector2 tester;
-    public float floatTest;
-    public bool boolTest;
 
     Transform emitter;
     public GameObject bulletPrefab;
+    public GameObject grenadePrefab;
 
     public float shotCoolDown = 0.1f;
     [HideInInspector] public float lastShot = 0;
 
+    public bool grenadeUnlocked = false;
     public float grenadeCoolDown = 5f;
     [HideInInspector] public float lastGrenade;
 
-    // Start is called before the first frame update
     void Start()
     {
         lastGrenade = -grenadeCoolDown;
@@ -64,11 +63,8 @@ public class playerScript : MonoBehaviour
 
         playerLayer = 10;
         lastJump = Time.time;
-
-        
-
-
     }
+
 
     void FixedUpdate()
     {
@@ -98,17 +94,26 @@ public class playerScript : MonoBehaviour
         anim.Play(chosenAnimation);
     }
 
+
     void doGrenade()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (grenadeUnlocked)
         {
-            if (currentTime - lastGrenade > grenadeCoolDown)
+            if (Input.GetKey(KeyCode.LeftShift))
             {
-                lastGrenade = currentTime;
-                Debug.Log("Grenade");
+                if (currentTime - lastGrenade > grenadeCoolDown)
+                {
+                    lastGrenade = currentTime;
+
+                    GameObject grenadeRef = GameObject.Instantiate(grenadePrefab);
+
+                    grenadeRef.GetComponent<grenadeScript>().init(emitter.position, new Vector2(direction, 0));
+
+                }
             }
         }
     }
+
 
     void doShoot()
     {
@@ -134,6 +139,7 @@ public class playerScript : MonoBehaviour
         }
     }
 
+
     public void receiveDamage(int damage, bool force = false)
     {
         if (currentTime - lastHurt > hurtCooldown || force)
@@ -144,15 +150,12 @@ public class playerScript : MonoBehaviour
     }
 
 
-
     bool getGrounded()
     {
         int layerMask = ~(1 << playerLayer);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, -Vector2.up, 1f, layerMask);
         if (hit.collider != null)
         {
-            
-            tester = new Vector2(hit.distance, 0.5f + height / 2);
             if (hit.distance < 0.5 + height / 2 && hit.collider.tag == "platform")
             {
                 return true;
@@ -160,6 +163,7 @@ public class playerScript : MonoBehaviour
         }
         return false;
     }
+
 
     void doGravity(ref Vector2 velocity, float gravity)
     {
@@ -170,7 +174,6 @@ public class playerScript : MonoBehaviour
             velocity.y = -20;
         }
     }
-
 
 
     void doMovement(ref Vector2 velocity)
@@ -190,15 +193,21 @@ public class playerScript : MonoBehaviour
 
     }
 
+
     void doJump(ref Vector2 velocity, bool isGrounded)
     {
-        floatTest = currentTime - lastJump;
-        if ((Input.GetKey("space") || Input.GetKey("w")) && currentTime - lastJump > jumpCooldown && isGrounded)
+        if ((Input.GetKey("space") || Input.GetKey("w")) && currentTime - lastJump > jumpCooldown)
         {
-            lastJump = currentTime;
-            velocity += new Vector2(0, 1) * jumpVel;
+            if (isGrounded)
+            {
+                lastJump = currentTime;
+                velocity += new Vector2(0, 1) * jumpVel;
+            } else if ((currentTime - lastDoubleJump > doubleJumpCoolDown) && doubleJumpUnlocked)
+            {
+                lastDoubleJump = currentTime;
+                lastJump = currentTime;
+                velocity += new Vector2(0, 1) * jumpVel * 0.5f;
+            }
         }
-
     }
-
 }

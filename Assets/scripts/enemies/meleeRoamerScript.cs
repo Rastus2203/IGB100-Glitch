@@ -114,7 +114,7 @@ public class meleeRoamerScript : MonoBehaviour
     public void receiveDamage(int damage)
     {
         health -= damage;
-        Debug.Log(health);
+        //Debug.Log(health);
     }
 
     bool checkFront()

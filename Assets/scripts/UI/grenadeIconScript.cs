@@ -16,9 +16,7 @@ public class grenadeIconScript : MonoBehaviour
 
     float maxGreyPercent = 0.6f;
 
-
     Image image;
-
 
     // Start is called before the first frame update
     void Start()
@@ -47,12 +45,13 @@ public class grenadeIconScript : MonoBehaviour
 
 
 
-
-
-
-
-        float newColour = colourBase; //(1 - colourModifier) + colourBase * colourModifier;
+        float newColour = colourBase; 
 
         image.color = new Color(newColour, newColour, newColour, 1f);
+    }
+
+    public void enableIcon()
+    {
+        GetComponent<Image>().enabled = true;
     }
 }

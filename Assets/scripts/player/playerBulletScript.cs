@@ -10,6 +10,9 @@ public class playerBulletScript : MonoBehaviour
 
     playerScript playerScript;
 
+    float hitTimer = 0f;
+    float hitDuration = 0.1f;
+
 
 
     void Start()
@@ -23,23 +26,36 @@ public class playerBulletScript : MonoBehaviour
     {
         if (other.tag != "Player" && other.tag != "playerBullet")
         {
-            Debug.Log(other.tag);
             other.gameObject.SendMessage("receiveDamage", damage, SendMessageOptions.DontRequireReceiver);
+            //hitTimer = Time.time;
             Destroy(gameObject);
+
         }
+
+
     }
-
-
 
     void OnTriggerStay2D(Collider2D other)
     {
         onHit(other);
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        //onHit(other);
+    }
 
     void FixedUpdate()
     {
         transform.position += velocity * speedScalar;
+
+        if (hitTimer > 0)
+        {
+            if (Time.time - hitTimer > hitDuration)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
     public void init(Vector3 position, Vector2 inVelocity)

@@ -9,6 +9,8 @@ TagManager:
   - platform
   - playerBullet
   - enemy
+  - grenade
+  - UICanvas
   layers:
   - Default
   - TransparentFX
