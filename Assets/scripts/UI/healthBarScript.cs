@@ -29,10 +29,10 @@ public class healthBarScript : MonoBehaviour
             Transform halfHeart = transform.GetChild(i);
             if (i < heartCount)
             {
-                halfHeart.GetComponent<Image>().color = Color.red;
+                halfHeart.GetComponent<Image>().enabled = true;
             } else
             {
-                halfHeart.GetComponent<Image>().color = Color.grey;
+                halfHeart.GetComponent<Image>().enabled = false;
             }
         }
     }

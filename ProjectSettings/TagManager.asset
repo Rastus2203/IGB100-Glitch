@@ -11,6 +11,9 @@ TagManager:
   - enemy
   - grenade
   - UICanvas
+  - enemyBullet
+  - trigger
+  - sceneManager
   layers:
   - Default
   - TransparentFX

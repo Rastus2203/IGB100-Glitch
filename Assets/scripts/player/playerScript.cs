@@ -7,11 +7,14 @@ public class playerScript : MonoBehaviour
 {
     Rigidbody2D rb;
 
+    sceneManager sceneMan;
+
     float lastJump;
-    float jumpCooldown = 0.3f;
+    float jumpCooldown = 0.4f;
     public bool doubleJumpUnlocked = false;
     public float lastDoubleJump;
     public float doubleJumpCoolDown = 1f;
+    float doubleJumpScalar = 0.7f;
 
     float currentTime;
     float deltaTime;
@@ -56,6 +59,8 @@ public class playerScript : MonoBehaviour
 
     void Start()
     {
+
+        sceneMan = GameObject.FindWithTag("sceneManager").GetComponent<sceneManager>();
         lastGrenade = -grenadeCoolDown;
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -72,6 +77,12 @@ public class playerScript : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (health <= 0)
+        {
+            sceneMan.diedScene();
+        }
+
+
         chosenAnimation = "player_idle";
 
         currentTime = Time.time;
@@ -211,7 +222,8 @@ public class playerScript : MonoBehaviour
             {
                 lastDoubleJump = currentTime;
                 lastJump = currentTime;
-                velocity += new Vector2(0, 1) * jumpVel * 0.5f;
+                velocity.y = 0;
+                velocity += new Vector2(0, 1) * jumpVel * doubleJumpScalar;
             }
         }
     }

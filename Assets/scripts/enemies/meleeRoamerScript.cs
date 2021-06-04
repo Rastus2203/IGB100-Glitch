@@ -136,18 +136,6 @@ public class meleeRoamerScript : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     bool getGrounded()
     {
         RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, -Vector2.up, 1f);
