@@ -50,6 +50,9 @@ public class playerScript : MonoBehaviour
     public float grenadeCoolDown = 5f;
     [HideInInspector] public float lastGrenade;
 
+    public AudioSource shootSound;
+    public AudioSource hurtSound;
+
     void Start()
     {
         lastGrenade = -grenadeCoolDown;
@@ -130,7 +133,7 @@ public class playerScript : MonoBehaviour
             {
                 lastShot = currentTime;
                 GameObject bulletRef = GameObject.Instantiate(bulletPrefab);
-
+                shootSound.Play();
 
                 
                 bulletRef.GetComponent<playerBulletScript>().init(emitter.position, new Vector2(direction, 0));
@@ -145,6 +148,7 @@ public class playerScript : MonoBehaviour
         if (currentTime - lastHurt > hurtCooldown || force)
         {
             lastHurt = currentTime;
+            hurtSound.Play();
             health -= damage;
         }
     }
