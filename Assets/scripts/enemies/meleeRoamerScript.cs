@@ -8,7 +8,7 @@ public class meleeRoamerScript : MonoBehaviour
     float gravity = 0.8f;
     public float moveSpeed = 2f;
     int damage = 1;
-    public int health = 5;
+    public int health = 3;
 
 
     bool wasGrounded;
