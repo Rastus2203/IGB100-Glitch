@@ -52,6 +52,7 @@ public class playerScript : MonoBehaviour
 
     public AudioSource shootSound;
     public AudioSource hurtSound;
+    public AudioSource grenadeSound;
 
     void Start()
     {

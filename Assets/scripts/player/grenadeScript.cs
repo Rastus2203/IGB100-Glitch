@@ -21,6 +21,7 @@ public class grenadeScript : MonoBehaviour
 
 
     public GameObject grenadeExplosion;
+    AudioSource grenadeSound;
 
     void Start()
     {
@@ -33,6 +34,7 @@ public class grenadeScript : MonoBehaviour
 
         playerScript = GameObject.FindWithTag("Player").GetComponent<playerScript>();
         damage = playerScript.grenadeDamage;
+        grenadeSound = playerScript.grenadeSound;
     }
 
     void FixedUpdate()
@@ -65,6 +67,7 @@ public class grenadeScript : MonoBehaviour
         if (other.tag == "platform" || other.tag == "enemy")
         {
             GameObject explosionRef = Instantiate(grenadeExplosion);
+            grenadeSound.Play();
             explosionRef.GetComponent<grenadeExplosionScript>().init(transform.position);
 
             
